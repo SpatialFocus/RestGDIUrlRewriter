@@ -1,0 +1,73 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution Items", "_solution Items", "{271DAFFE-1EE3-416E-851A-A28F87199C0B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+		README.md = README.md
+		stylecop.json = stylecop.json
+		UbaUrlRewrite.sln.DotSettings = UbaUrlRewrite.sln.DotSettings
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UbaUrlRewrite.Management.Business", "src\UbaUrlRewrite.Management.Business\UbaUrlRewrite.Management.Business.csproj", "{0AD22A86-E87A-42DF-ABC4-8745B4371484}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UbaUrlRewrite.Management.Business.Test", "src\UbaUrlRewrite.Management.Business.Test\UbaUrlRewrite.Management.Business.Test.csproj", "{1B0C8895-8951-4881-96B4-CE141FAB523D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UbaUrlRewrite.Management.Business.Playground", "src\UbaUrlRewrite.Management.Business.Playground\UbaUrlRewrite.Management.Business.Playground.csproj", "{BDE6B5AC-0D6E-4765-800D-1BBC66ED7FD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UbaUrlRewrite.Data", "src\UbaUrlRewrite.Data\UbaUrlRewrite.Data.csproj", "{C648F73F-E630-4448-B47B-803F0501DC34}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{D7C68E1A-554B-4884-90EA-8F8E98019E5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proxy", "proxy", "{E0A8300D-3BE1-4111-8836-C29781694083}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "management", "management", "{1FCDC91E-B411-4C57-B434-5CD394D49AE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UbaUrlRewrite.Proxy", "src\UbaUrlRewrite.Proxy\UbaUrlRewrite.Proxy.csproj", "{DC008C27-F73E-42BC-A615-EB4BC8595595}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AD22A86-E87A-42DF-ABC4-8745B4371484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD22A86-E87A-42DF-ABC4-8745B4371484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD22A86-E87A-42DF-ABC4-8745B4371484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD22A86-E87A-42DF-ABC4-8745B4371484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B0C8895-8951-4881-96B4-CE141FAB523D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B0C8895-8951-4881-96B4-CE141FAB523D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B0C8895-8951-4881-96B4-CE141FAB523D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B0C8895-8951-4881-96B4-CE141FAB523D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE6B5AC-0D6E-4765-800D-1BBC66ED7FD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE6B5AC-0D6E-4765-800D-1BBC66ED7FD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE6B5AC-0D6E-4765-800D-1BBC66ED7FD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE6B5AC-0D6E-4765-800D-1BBC66ED7FD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C648F73F-E630-4448-B47B-803F0501DC34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C648F73F-E630-4448-B47B-803F0501DC34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C648F73F-E630-4448-B47B-803F0501DC34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C648F73F-E630-4448-B47B-803F0501DC34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC008C27-F73E-42BC-A615-EB4BC8595595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC008C27-F73E-42BC-A615-EB4BC8595595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC008C27-F73E-42BC-A615-EB4BC8595595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC008C27-F73E-42BC-A615-EB4BC8595595}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0AD22A86-E87A-42DF-ABC4-8745B4371484} = {1FCDC91E-B411-4C57-B434-5CD394D49AE0}
+		{1B0C8895-8951-4881-96B4-CE141FAB523D} = {1FCDC91E-B411-4C57-B434-5CD394D49AE0}
+		{BDE6B5AC-0D6E-4765-800D-1BBC66ED7FD3} = {1FCDC91E-B411-4C57-B434-5CD394D49AE0}
+		{C648F73F-E630-4448-B47B-803F0501DC34} = {D7C68E1A-554B-4884-90EA-8F8E98019E5C}
+		{DC008C27-F73E-42BC-A615-EB4BC8595595} = {E0A8300D-3BE1-4111-8836-C29781694083}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {a984b540-061a-4867-b603-1a978c79b3d5}
+	EndGlobalSection
+EndGlobal
