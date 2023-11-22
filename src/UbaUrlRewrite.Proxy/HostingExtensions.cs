@@ -113,10 +113,7 @@ internal static class HostingExtensions
 
 		OptionsWrapper<IndexMetadataOptions> options = new(new IndexMetadataOptions
 		{
-			DataProviderSettings = new List<DataProviderSettings>
-			{
-				new() { Name = "Rolands Geonetwork", Url = "https://geonetwork.rest-gdi.geo-data.space/geonetwork/srv/ger/csw", },
-			},
+			DataProviderSettings = builder.Configuration.GetSection("MetadataEndpoints").Get<List<DataProviderSettings>>()!,
 		});
 
 		builder.Services.AddSingleton<IOptions<IndexMetadataOptions>>(options);

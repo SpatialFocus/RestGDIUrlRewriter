@@ -2,42 +2,42 @@
 // Copyright (c) Spatial Focus GmbH. All rights reserved.
 // </copyright>
 
-namespace UbaUrlRewrite.Proxy
+namespace UbaUrlRewrite.Proxy;
+
+using Yarp.ReverseProxy.Forwarder;
+
+public static class Requests
 {
-	using Yarp.ReverseProxy.Forwarder;
+	public static Func<HttpContext, HttpRequestMessage, ValueTask> DescribeFeatureType(CacheEntry cachedEntry) =>
+		(_, proxyRequest) =>
+		{
+			QueryString queryString = new QueryString().Add("service", "WFS")
+				.Add("version", cachedEntry.ServiceEndpointVersion)
+				.Add("request", "DescribeFeatureType")
+				.Add("typeName", cachedEntry.FeatureType);
 
-	public static class Requests
-	{
-		public static Func<HttpContext, HttpRequestMessage, ValueTask> DescribeFeatureType(CacheEntry cachedEntry) =>
-			(_, proxyRequest) =>
+			proxyRequest.Method = HttpMethod.Get;
+			proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.DescribeFeatureTypeUrl.Replace("wfs", "ows"),
+				string.Empty, queryString);
+
+			proxyRequest.Headers.Host = cachedEntry.ServiceEndpointHost;
+
+			return default;
+		};
+
+	public static Func<HttpContext, HttpRequestMessage, ValueTask> GetFeatureByLocalId(CacheEntry cachedEntry, string localId,
+		string? outputFormat) =>
+		(_, proxyRequest) =>
+		{
+			proxyRequest.Method = HttpMethod.Post;
+
+			string content;
+
+			switch (cachedEntry.ServiceEndpointVersion)
 			{
-				QueryString queryString = new QueryString().Add("service", "WFS")
-					.Add("version", cachedEntry.ServiceEndpointVersion)
-					.Add("request", "DescribeFeatureType")
-					.Add("typeName", cachedEntry.FeatureType);
-
-				proxyRequest.Method = HttpMethod.Get;
-				proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.DescribeFeatureTypeUrl.Replace("wfs", "ows"),
-					string.Empty, queryString);
-
-				proxyRequest.Headers.Host = cachedEntry.ServiceEndpointHost;
-
-				return default;
-			};
-
-		public static Func<HttpContext, HttpRequestMessage, ValueTask> GetFeatureByLocalId(CacheEntry cachedEntry, string localId,
-			string? outputFormat) =>
-			(_, proxyRequest) =>
-			{
-				proxyRequest.Method = HttpMethod.Post;
-
-				string content;
-
-				switch (cachedEntry.ServiceEndpointVersion)
-				{
-					case "1.1.0":
-					case "1.1.3":
-						content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+				case "1.1.0":
+				case "1.1.3":
+					content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 							<GetFeature service=""WFS"" version=""{cachedEntry.DataProviderVersion}""
 								xmlns:ogc=""http://www.opengis.net/ogc""
 								xmlns=""http://www.opengis.net/wfs""
@@ -52,11 +52,11 @@ namespace UbaUrlRewrite.Proxy
 									</ogc:Filter>
 								</Query>
 							</GetFeature>";
-						break;
+					break;
 
-					case "2.0.0":
-					case "2.0.2":
-						content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+				case "2.0.0":
+				case "2.0.2":
+					content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 							<GetFeature service=""WFS"" version=""{cachedEntry.DataProviderVersion}""
 								xmlns:ogc=""http://www.opengis.net/ogc""
 								xmlns=""http://www.opengis.net/wfs/2.0""
@@ -72,33 +72,33 @@ namespace UbaUrlRewrite.Proxy
 									</ogc:Filter>
 								</Query>
 							</GetFeature>";
-						break;
+					break;
 
-					default:
-						throw new InvalidOperationException("WFS version not supported");
-				}
+				default:
+					throw new InvalidOperationException("WFS version not supported");
+			}
 
-				proxyRequest.Content = new StringContent(content);
-				proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.GetFeaturePostUrl.Replace("wfs", "ows"),
-					string.Empty, outputFormat == null ? QueryString.Empty : default(QueryString).Add("outputFormat", outputFormat));
-				proxyRequest.Headers.Host = cachedEntry.ServiceEndpointHost;
+			proxyRequest.Content = new StringContent(content);
+			proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.GetFeaturePostUrl.Replace("wfs", "ows"),
+				string.Empty, outputFormat == null ? QueryString.Empty : default(QueryString).Add("outputFormat", outputFormat));
+			proxyRequest.Headers.Host = cachedEntry.ServiceEndpointHost;
 
-				return default;
-			};
+			return default;
+		};
 
-		public static Func<HttpContext, HttpRequestMessage, ValueTask> GetFeatureByLocalIdAndVersionId(CacheEntry cachedEntry,
-			string localId, string versionId, string? outputFormat) =>
-			(_, proxyRequest) =>
+	public static Func<HttpContext, HttpRequestMessage, ValueTask> GetFeatureByLocalIdAndVersionId(CacheEntry cachedEntry,
+		string localId, string versionId, string? outputFormat) =>
+		(_, proxyRequest) =>
+		{
+			proxyRequest.Method = HttpMethod.Post;
+
+			string content;
+
+			switch (cachedEntry.ServiceEndpointVersion)
 			{
-				proxyRequest.Method = HttpMethod.Post;
-
-				string content;
-
-				switch (cachedEntry.ServiceEndpointVersion)
-				{
-					case "1.1.0":
-					case "1.1.3":
-						content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+				case "1.1.0":
+				case "1.1.3":
+					content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 							<GetFeature service=""WFS"" version=""{cachedEntry.DataProviderVersion}""
 								xmlns:ogc=""http://www.opengis.net/ogc""
 								xmlns=""http://www.opengis.net/wfs""
@@ -119,11 +119,11 @@ namespace UbaUrlRewrite.Proxy
 									</ogc:Filter>
 								</Query>
 							</GetFeature>";
-						break;
+					break;
 
-					case "2.0.0":
-					case "2.0.2":
-						content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+				case "2.0.0":
+				case "2.0.2":
+					content = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
 							<GetFeature service=""WFS"" version=""{cachedEntry.DataProviderVersion}""
 								xmlns:ogc=""http://www.opengis.net/ogc""
 								xmlns=""http://www.opengis.net/wfs/2.0""
@@ -145,37 +145,36 @@ namespace UbaUrlRewrite.Proxy
 									</ogc:Filter>
 								</Query>
 							</GetFeature>";
-						break;
+					break;
 
-					default:
-						throw new InvalidOperationException("WFS version not supported");
-				}
+				default:
+					throw new InvalidOperationException("WFS version not supported");
+			}
 
-				proxyRequest.Content = new StringContent(content);
-				proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.GetFeaturePostUrl.Replace("wfs", "ows"),
-					string.Empty, outputFormat == null ? QueryString.Empty : default(QueryString).Add("outputFormat", outputFormat));
-				proxyRequest.Headers.Host = cachedEntry.ServiceEndpointHost;
+			proxyRequest.Content = new StringContent(content);
+			proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.GetFeaturePostUrl.Replace("wfs", "ows"),
+				string.Empty, outputFormat == null ? QueryString.Empty : default(QueryString).Add("outputFormat", outputFormat));
+			proxyRequest.Headers.Host = cachedEntry.ServiceEndpointHost;
 
-				return default;
-			};
+			return default;
+		};
 
-		public static Func<HttpContext, HttpRequestMessage, ValueTask> GetRecordById(CacheEntry cachedEntry) =>
-			(_, proxyRequest) =>
-			{
-				QueryString queryString = new QueryString().Add("service", "CSW")
-					.Add("version", cachedEntry.DataProviderVersion)
-					.Add("request", "GetRecordById")
-					.Add("id", cachedEntry.MetadataId)
-					.Add("ElementSetName", "full")
-					.Add("outputSchema", "http://www.isotc211.org/2005/gmd");
+	public static Func<HttpContext, HttpRequestMessage, ValueTask> GetRecordById(CacheEntry cachedEntry) =>
+		(_, proxyRequest) =>
+		{
+			QueryString queryString = new QueryString().Add("service", "CSW")
+				.Add("version", cachedEntry.DataProviderVersion)
+				.Add("request", "GetRecordById")
+				.Add("id", cachedEntry.MetadataId)
+				.Add("ElementSetName", "full")
+				.Add("outputSchema", "http://www.isotc211.org/2005/gmd");
 
-				proxyRequest.Method = HttpMethod.Get;
-				proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.GetRecordByIdUrl.Replace("wfs", "ows"),
-					string.Empty, queryString);
+			proxyRequest.Method = HttpMethod.Get;
+			proxyRequest.RequestUri = RequestUtilities.MakeDestinationAddress(cachedEntry.GetRecordByIdUrl.Replace("wfs", "ows"),
+				string.Empty, queryString);
 
-				proxyRequest.Headers.Host = cachedEntry.DataProviderHost;
+			proxyRequest.Headers.Host = cachedEntry.DataProviderHost;
 
-				return default;
-			};
-	}
+			return default;
+		};
 }

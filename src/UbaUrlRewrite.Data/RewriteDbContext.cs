@@ -5,7 +5,6 @@
 namespace UbaUrlRewrite.Data;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using UbaUrlRewrite.Data.Entities;
 
 public class RewriteDbContext : DbContext
