@@ -1,4 +1,4 @@
-# URL-Rewriter
+# REST GDI Agrar URL-Rewriter
 
 Die URL-Rewriter Softwarekomponente soll die automatisierte Auflösung des `gml:identifier` ermöglichen. Der `gml:identifier` ist der von ISO 19136:2020 definierte, global eindeutige Identifikator für Objekte. Die Zusammensetzung bzw. das Muster, das bei der Implementierung des `gml:identifier` Anwendung findet, ist nicht Teil des Standards. In Österreich wurden von der INSPIRE Assistenzstelle Vorschläge für die Umsetzung der sogenannten `InspireId` erarbeitet.
 
