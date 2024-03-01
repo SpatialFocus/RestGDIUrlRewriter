@@ -40,8 +40,14 @@ internal static class HostingExtensions
 
 		ForwarderRequestConfig requestConfig = new() { ActivityTimeout = TimeSpan.FromSeconds(120), };
 
-		app.MapGet("/{metadataId}", async (string metadataId,
-			ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
+		app.MapGet("/reload",
+			async (IndexMetadataService indexMetadataHostedService, CancellationToken cancellationToken) =>
+			{
+				await indexMetadataHostedService.RunAsync(cancellationToken);
+				return "Success";
+			});
+
+		app.MapGet("/{metadataId}", async (string metadataId, ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
 		{
 			if (cache.TryGetValue(metadataId, out CacheEntry cachedEntry))
 			{
@@ -79,8 +85,8 @@ internal static class HostingExtensions
 			}
 		});
 
-		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}/{localId}/{versionId}", async (string metadataId,
-			string localId, string versionId, ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
+		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}/{localId}/{versionId}", async (string metadataId, string localId,
+			string versionId, ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
 		{
 			if (cache.TryGetValue(metadataId, out CacheEntry cachedEntry))
 			{
@@ -117,6 +123,7 @@ internal static class HostingExtensions
 		});
 
 		builder.Services.AddSingleton<IOptions<IndexMetadataOptions>>(options);
+		builder.Services.AddTransient<IndexMetadataService>();
 		builder.Services.AddHostedService<IndexMetadataHostedService>();
 
 		builder.Services.AddDbContext<RewriteDbContext>(x => x.UseLazyLoadingProxies().UseInMemoryDatabase("memory"));
