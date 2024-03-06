@@ -46,7 +46,7 @@ public static class Requests
 								<Query typeName=""{cachedEntry.FeatureType}"">
 									<ogc:Filter>
 										<ogc:PropertyIsEqualTo>
-											<ogc:PropertyName>{cachedEntry.FeatureTypeNamespacePrefix}:inspireId/base:Identifier/base:localId</ogc:PropertyName>
+											<ogc:PropertyName>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</ogc:PropertyName>
 											<ogc:Literal>{localId}</ogc:Literal>
 										</ogc:PropertyIsEqualTo>
 									</ogc:Filter>
@@ -66,7 +66,7 @@ public static class Requests
 								<Query typeNames=""{cachedEntry.FeatureType}"">
 									<ogc:Filter>
 										<fes:PropertyIsEqualTo>
-											<fes:ValueReference>{cachedEntry.FeatureTypeNamespacePrefix}:inspireId/base:Identifier/base:localId</fes:ValueReference>
+											<fes:ValueReference>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</fes:ValueReference>
 											<fes:Literal>{localId}</fes:Literal>
 										</fes:PropertyIsEqualTo>
 									</ogc:Filter>
@@ -108,11 +108,11 @@ public static class Requests
 									<ogc:Filter>
 										<ogc:And>
 											<ogc:PropertyIsEqualTo>
-												<ogc:PropertyName>{cachedEntry.FeatureTypeNamespacePrefix}:inspireId/base:Identifier/base:localId</ogc:PropertyName>
+												<ogc:PropertyName>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</ogc:PropertyName>
 												<ogc:Literal>{localId}</ogc:Literal>
 											</ogc:PropertyIsEqualTo>
 											<ogc:PropertyIsEqualTo>
-												<ogc:PropertyName>{cachedEntry.FeatureTypeNamespacePrefix}:inspireId/base:Identifier/base:versionId</ogc:PropertyName>
+												<ogc:PropertyName>{cachedEntry.IdentifierBase}/base:Identifier/base:versionId</ogc:PropertyName>
 												<ogc:Literal>{versionId}</ogc:Literal>
 											</ogc:PropertyIsEqualTo>
 										</ogc:And>
@@ -134,11 +134,11 @@ public static class Requests
 									<ogc:Filter>
 										<fes:And>
 											<fes:PropertyIsEqualTo>
-												<fes:ValueReference>{cachedEntry.FeatureTypeNamespacePrefix}:inspireId/base:Identifier/base:localId</fes:ValueReference>
+												<fes:ValueReference>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</fes:ValueReference>
 												<fes:Literal>{localId}</fes:Literal>
 											</fes:PropertyIsEqualTo>
 											<fes:PropertyIsEqualTo>
-												<fes:ValueReference>{cachedEntry.FeatureTypeNamespacePrefix}:inspireId/base:Identifier/base:versionId</fes:ValueReference>
+												<fes:ValueReference>{cachedEntry.IdentifierBase}/base:Identifier/base:versionId</fes:ValueReference>
 												<fes:Literal>{versionId}</fes:Literal>
 											</fes:PropertyIsEqualTo>
 										</fes:And>

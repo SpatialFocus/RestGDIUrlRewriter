@@ -141,6 +141,7 @@ public class IndexMetadataService
 							DescribeFeatureTypeUrl = new Uri(serviceEndpoint.DescribeFeatureTypeUrl).GetLeftPart(UriPartial.Path),
 							GetFeaturePostUrl = serviceEndpoint.GetFeaturePostUrl,
 							SupportedOutputFormats = new HashSet<string>(serviceEndpoint.GetFeatureOutputFormats),
+							IsInspireService = record.RawXml.Contains("//inspire.ec.europa.eu"),
 						});
 
 					Console.Write($"> {record.MetadataId}: ");

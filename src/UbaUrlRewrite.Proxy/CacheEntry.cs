@@ -27,4 +27,8 @@ public struct CacheEntry
 	public required string DataProviderVersion { get; init; }
 
 	public required string ServiceEndpointVersion { get; init; }
+
+	public required bool IsInspireService { get; init; }
+
+	public string IdentifierBase => IsInspireService ? $"{FeatureTypeNamespacePrefix}:inspireId" : "rest-gdi-agrar:Identifier";
 }
