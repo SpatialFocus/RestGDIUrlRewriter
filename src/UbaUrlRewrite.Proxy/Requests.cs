@@ -32,6 +32,7 @@ public static class Requests
 			proxyRequest.Method = HttpMethod.Post;
 
 			string content;
+			string idProperty = cachedEntry.IsInspireService ? $"{cachedEntry.IdentifierBase}/base:Identifier/base:localId" : "localId";
 
 			switch (cachedEntry.ServiceEndpointVersion)
 			{
@@ -46,7 +47,7 @@ public static class Requests
 								<Query typeName=""{cachedEntry.FeatureType}"">
 									<ogc:Filter>
 										<ogc:PropertyIsEqualTo>
-											<ogc:PropertyName>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</ogc:PropertyName>
+											<ogc:PropertyName>{idProperty}</ogc:PropertyName>
 											<ogc:Literal>{localId}</ogc:Literal>
 										</ogc:PropertyIsEqualTo>
 									</ogc:Filter>
@@ -66,7 +67,7 @@ public static class Requests
 								<Query typeNames=""{cachedEntry.FeatureType}"">
 									<ogc:Filter>
 										<fes:PropertyIsEqualTo>
-											<fes:ValueReference>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</fes:ValueReference>
+											<fes:ValueReference>{idProperty}</fes:ValueReference>
 											<fes:Literal>{localId}</fes:Literal>
 										</fes:PropertyIsEqualTo>
 									</ogc:Filter>
@@ -94,6 +95,9 @@ public static class Requests
 
 			string content;
 
+			string idProperty = cachedEntry.IsInspireService ? $"{cachedEntry.IdentifierBase}/base:Identifier/base:localId" : "localId";
+			string versionProperty = cachedEntry.IsInspireService ? $"{cachedEntry.IdentifierBase}/base:Identifier/base:versionId" : "versionId";
+
 			switch (cachedEntry.ServiceEndpointVersion)
 			{
 				case "1.1.0":
@@ -108,11 +112,11 @@ public static class Requests
 									<ogc:Filter>
 										<ogc:And>
 											<ogc:PropertyIsEqualTo>
-												<ogc:PropertyName>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</ogc:PropertyName>
+												<ogc:PropertyName>{idProperty}</ogc:PropertyName>
 												<ogc:Literal>{localId}</ogc:Literal>
 											</ogc:PropertyIsEqualTo>
 											<ogc:PropertyIsEqualTo>
-												<ogc:PropertyName>{cachedEntry.IdentifierBase}/base:Identifier/base:versionId</ogc:PropertyName>
+												<ogc:PropertyName>{versionProperty}</ogc:PropertyName>
 												<ogc:Literal>{versionId}</ogc:Literal>
 											</ogc:PropertyIsEqualTo>
 										</ogc:And>
@@ -134,11 +138,11 @@ public static class Requests
 									<ogc:Filter>
 										<fes:And>
 											<fes:PropertyIsEqualTo>
-												<fes:ValueReference>{cachedEntry.IdentifierBase}/base:Identifier/base:localId</fes:ValueReference>
+												<fes:ValueReference>{idProperty}</fes:ValueReference>
 												<fes:Literal>{localId}</fes:Literal>
 											</fes:PropertyIsEqualTo>
 											<fes:PropertyIsEqualTo>
-												<fes:ValueReference>{cachedEntry.IdentifierBase}/base:Identifier/base:versionId</fes:ValueReference>
+												<fes:ValueReference>{versionProperty}</fes:ValueReference>
 												<fes:Literal>{versionId}</fes:Literal>
 											</fes:PropertyIsEqualTo>
 										</fes:And>

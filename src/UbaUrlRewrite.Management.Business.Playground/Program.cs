@@ -21,7 +21,7 @@ public static class Program
 
 	public static async Task Main(string[] args)
 	{
-		string cswUrl = "https://geonetwork.rest-gdi.geo-data.space/geonetwork/srv/ger/csw";
+		string cswUrl = "https://geonetwork-rest-gdi.agrarforschung.at/geonetwork/srv/ger/csw";
 
 		ServiceCollection services = new();
 		services.AddDbContext<RewriteDbContext>(x => x.UseLazyLoadingProxies().UseInMemoryDatabase("memory"));
