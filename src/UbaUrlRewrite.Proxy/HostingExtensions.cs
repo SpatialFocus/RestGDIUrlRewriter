@@ -39,36 +39,36 @@ internal static class HostingExtensions
 
 		ForwarderRequestConfig requestConfig = new() { ActivityTimeout = TimeSpan.FromSeconds(120), };
 
-		app.MapGet("/reload",
-			async (IndexMetadataService indexMetadataHostedService, CancellationToken cancellationToken) =>
-			{
-				await indexMetadataHostedService.RunAsync(cancellationToken);
-				return "Success";
-			});
-
-		app.MapGet("/{metadataId}", async (string metadataId, ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
+		app.MapGet("/reload", async (IndexMetadataService indexMetadataHostedService, CancellationToken cancellationToken) =>
 		{
-			if (cache.TryGetValue(metadataId, out CacheEntry cachedEntry))
+			await indexMetadataHostedService.RunAsync(cancellationToken);
+			return "Success";
+		});
+
+		app.MapGet("/{metadataId}", async (string metadataId, ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>> cache,
+			HttpContext httpContext) =>
+		{
+			if (cache.TryGetFirstCacheEntry(metadataId, out CacheEntry cachedEntry))
 			{
 				await forwarder.SendAsync(httpContext, cachedEntry.GetRecordByIdUrl, httpClient, requestConfig,
-					Requests.GetRecordById(cachedEntry));
+					Requests.GetRecordById(cachedEntry), Requests.PatchContentType());
 			}
 		});
 
-		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}", async (string metadataId,
-			ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
+		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}", async (string metadataId, string featureType,
+			ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>> cache, HttpContext httpContext) =>
 		{
-			if (cache.TryGetValue(metadataId, out CacheEntry cachedEntry))
+			if (cache.TryGetCacheEntry(metadataId, featureType, out CacheEntry cachedEntry))
 			{
 				await forwarder.SendAsync(httpContext, cachedEntry.GetFeaturePostUrl, httpClient, requestConfig,
-					Requests.DescribeFeatureType(cachedEntry));
+					Requests.DescribeFeatureType(cachedEntry), Requests.PatchContentType());
 			}
 		});
 
-		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}/{localId}", async (string metadataId, string localId,
-			ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
+		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}/{localId}", async (string metadataId, string featureType,
+			string localId, ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>> cache, HttpContext httpContext) =>
 		{
-			if (cache.TryGetValue(metadataId, out CacheEntry cachedEntry))
+			if (cache.TryGetCacheEntry(metadataId, featureType, out CacheEntry cachedEntry))
 			{
 				string? outputFormat = httpContext.Request.Query["outputFormat"].FirstOrDefault();
 
@@ -79,15 +79,16 @@ internal static class HostingExtensions
 				else
 				{
 					await forwarder.SendAsync(httpContext, cachedEntry.GetFeaturePostUrl, httpClient, requestConfig,
-						Requests.GetFeatureByLocalId(cachedEntry, localId, outputFormat));
+						Requests.GetFeatureByLocalId(cachedEntry, localId, outputFormat), Requests.PatchContentType());
 				}
 			}
 		});
 
-		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}/{localId}/{versionId}", async (string metadataId, string localId,
-			string versionId, ConcurrentDictionary<string, CacheEntry> cache, HttpContext httpContext) =>
+		app.MapGet("/{metadataId}/{applicationSchema}.{featureType}/{localId}/{versionId}", async (string metadataId, string featureType,
+			string localId, string versionId, ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>> cache,
+			HttpContext httpContext) =>
 		{
-			if (cache.TryGetValue(metadataId, out CacheEntry cachedEntry))
+			if (cache.TryGetCacheEntry(metadataId, featureType, out CacheEntry cachedEntry))
 			{
 				string? outputFormat = httpContext.Request.Query["outputFormat"].FirstOrDefault();
 
@@ -98,7 +99,7 @@ internal static class HostingExtensions
 				else
 				{
 					await forwarder.SendAsync(httpContext, cachedEntry.GetFeaturePostUrl, httpClient, requestConfig,
-						Requests.GetFeatureByLocalIdAndVersionId(cachedEntry, localId, versionId, outputFormat));
+						Requests.GetFeatureByLocalIdAndVersionId(cachedEntry, localId, versionId, outputFormat), Requests.PatchContentType());
 				}
 			}
 		});
@@ -132,7 +133,8 @@ internal static class HostingExtensions
 		builder.Services.AddTransient<MetadataClient>();
 		builder.Services.AddTransient<FeatureClient>();
 
-		builder.Services.AddSingleton<ConcurrentDictionary<string, CacheEntry>>();
+		builder.Services.AddSingleton(
+			new ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>>(StringComparer.OrdinalIgnoreCase));
 
 		return builder.Build();
 	}

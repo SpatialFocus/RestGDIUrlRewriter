@@ -106,8 +106,8 @@ public class IndexMetadataService
 		using IServiceScope serviceScope = this.serviceProvider.CreateScope();
 		IServiceProvider scopedServiceProvider = serviceScope.ServiceProvider;
 
-		ConcurrentDictionary<string, CacheEntry> index =
-			scopedServiceProvider.GetRequiredService<ConcurrentDictionary<string, CacheEntry>>();
+		ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>> index =
+			scopedServiceProvider.GetRequiredService<ConcurrentDictionary<string, ConcurrentDictionary<string, CacheEntry>>>();
 
 		RewriteDbContext dbContext = scopedServiceProvider.GetRequiredService<RewriteDbContext>();
 
@@ -127,22 +127,22 @@ public class IndexMetadataService
 						continue;
 					}
 
-					index.TryAdd(record.MetadataId,
-						new CacheEntry
-						{
-							MetadataId = record.MetadataId,
-							DataProviderHost = new Uri(dataProvider.GetRecordByIdUrl).Host,
-							DataProviderVersion = dataProvider.Version,
-							GetRecordByIdUrl = dataProvider.GetRecordByIdUrl,
-							ServiceEndpointHost = new Uri(serviceEndpoint.GetCapabilitiesUrl).Host,
-							ServiceEndpointVersion = serviceEndpoint.Version,
-							FeatureType = serviceEndpoint.Name,
-							FeatureTypeNamespacePrefix = serviceEndpoint.Name.Split(":").First(),
-							DescribeFeatureTypeUrl = new Uri(serviceEndpoint.DescribeFeatureTypeUrl).GetLeftPart(UriPartial.Path),
-							GetFeaturePostUrl = serviceEndpoint.GetFeaturePostUrl,
-							SupportedOutputFormats = new HashSet<string>(serviceEndpoint.GetFeatureOutputFormats),
-							IsInspireService = record.RawXml.Contains("//inspire.ec.europa.eu"),
-						});
+					index.TryAdd(record.MetadataId, new ConcurrentDictionary<string, CacheEntry>(StringComparer.OrdinalIgnoreCase));
+					index[record.MetadataId].TryAdd(serviceEndpoint.Name.Split(":").Last(), new CacheEntry
+					{
+						MetadataId = record.MetadataId,
+						DataProviderHost = new Uri(dataProvider.GetRecordByIdUrl).Host,
+						DataProviderVersion = dataProvider.Version,
+						GetRecordByIdUrl = dataProvider.GetRecordByIdUrl,
+						ServiceEndpointHost = new Uri(serviceEndpoint.GetCapabilitiesUrl).Host,
+						ServiceEndpointVersion = serviceEndpoint.Version,
+						FeatureType = serviceEndpoint.Name,
+						FeatureTypeNamespacePrefix = serviceEndpoint.Name.Split(":").First(),
+						DescribeFeatureTypeUrl = new Uri(serviceEndpoint.DescribeFeatureTypeUrl).GetLeftPart(UriPartial.Path),
+						GetFeaturePostUrl = serviceEndpoint.GetFeaturePostUrl,
+						SupportedOutputFormats = new HashSet<string>(serviceEndpoint.GetFeatureOutputFormats),
+						IsInspireService = record.RawXml.Contains("//inspire.ec.europa.eu"),
+					});
 
 					Console.Write($"> {record.MetadataId}: ");
 					Console.Write($"{serviceEndpoint.GetCapabilitiesUrl}");
