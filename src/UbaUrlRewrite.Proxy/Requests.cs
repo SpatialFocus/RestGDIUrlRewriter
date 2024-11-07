@@ -181,4 +181,15 @@ public static class Requests
 
 			return default;
 		};
+
+	public static Func<HttpContext, HttpResponseMessage?, ValueTask> PatchContentType() =>
+		(httpContent, proxyResponse) =>
+		{
+			if (httpContent.Response.ContentType?.StartsWith("application/gml+xml") == true)
+			{
+				httpContent.Response.ContentType = "application/xml";
+			}
+
+			return default;
+		};
 }
