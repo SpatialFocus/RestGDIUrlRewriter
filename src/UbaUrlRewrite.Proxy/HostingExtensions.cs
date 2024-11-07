@@ -27,7 +27,6 @@ internal static class HostingExtensions
 		HttpMessageInvoker httpClient = new(new SocketsHttpHandler
 		{
 			UseProxy = false,
-			AllowAutoRedirect = false,
 			AutomaticDecompression = DecompressionMethods.None,
 			UseCookies = false,
 			ActivityHeadersPropagator = new ReverseProxyPropagator(DistributedContextPropagator.Current),
